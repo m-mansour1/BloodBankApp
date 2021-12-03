@@ -6,9 +6,16 @@
     android:layout_height="match_parent"
     tools:context=".LoginActivity">
 
-    <TextView
+    <Button
+        android:id="@+id/registerButton"
+        android:text="GO TO REGISTRATION PAGE"
+        android:textAllCaps="false"
+        android:layout_marginTop="10dp"
+        android:layout_gravity="center"
+        android:textColor="#fff"
+        android:textSize="20sp"
+        android:backgroundTint="#FF5555"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Log In "/>
+        android:layout_height="60dp"/>
 
 </LinearLayout>
