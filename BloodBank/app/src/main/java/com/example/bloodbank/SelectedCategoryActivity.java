@@ -7,6 +7,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.os.Bundle;
+import android.view.MenuItem;
 import android.widget.LinearLayout;
 
 import com.example.bloodbank.Adapter.UserAdapter;
@@ -52,10 +53,63 @@ public class SelectedCategoryActivity extends AppCompatActivity {
 
         if(getIntent().getExtras() != null){
             title = getIntent().getStringExtra("group");
+
             getSupportActionBar().setTitle("Blood group " + title);
 
-            readUsers();
+            if(title.equals("Compatible with me")){
+                getCompatibleUsers();
+                getSupportActionBar().setTitle("Compatible with me");
+
+            }
+            else{
+                readUsers();
+            }
+
         }
+    }
+
+    private void getCompatibleUsers() {
+
+        DatabaseReference ref = FirebaseDatabase.getInstance().getReference().child("users").
+                child(FirebaseAuth.getInstance().getCurrentUser().getUid());
+        ref.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                String result;
+                String type = snapshot.child("type").getValue().toString();
+                if(type.equals("donor")){
+                    result = "recipient";
+                }else{
+                    result = "donor";
+                }
+
+                String bloodtype = snapshot.child("bloodType").getValue().toString();
+                DatabaseReference reference = FirebaseDatabase.getInstance().getReference().
+                        child("users");
+                Query query = reference.orderByChild("search").equalTo(result+bloodtype);//used search key in database
+                query.addValueEventListener(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(@NonNull DataSnapshot snapshot) {
+                        userList.clear();
+                        for(DataSnapshot dataSnapshot: snapshot.getChildren()){
+                            User user = dataSnapshot.getValue(User.class);
+                            userList.add(user);
+                        }
+                        userAdapter.notifyDataSetChanged();
+                    }
+
+                    @Override
+                    public void onCancelled(@NonNull DatabaseError error) {
+
+                    }
+                });
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        });
     }
 
     private void readUsers() {
@@ -99,5 +153,18 @@ public class SelectedCategoryActivity extends AppCompatActivity {
 
             }
         });
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+        switch(item.getItemId()){
+            case android.R.id.home:
+                finish();//get back to the last activity that we came from
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
+        }
+
+
     }
 }
