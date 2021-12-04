@@ -10,6 +10,15 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.BloodBank">
         <activity
+            android:name=".SelectedCategoryActivity"
+            android:exported="false" />
+        <activity
+            android:name=".ProfileActivity"
+            android:exported="false" />
+        <activity
+            android:name=".MainPage"
+            android:exported="false" />
+        <activity
             android:name=".RecipientRegistrationActivity"
             android:exported="true" />
         <activity

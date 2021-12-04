@@ -1,6 +1,9 @@
 <resources>
     <string name="app_name">Blood Bank</string>
 
+    <string name="navigation_drawer_open">Open Navigation Drawer</string>
+    <string name="navigation_drawer_close">Close Navigation Drawer</string>
+
     <string-array name="bloodtypes">
         <item>Select Your Blood Type</item>
         <item>A+</item>
