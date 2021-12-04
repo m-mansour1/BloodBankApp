@@ -255,6 +255,12 @@ public class MainPage extends AppCompatActivity implements NavigationView.OnNavi
                 startActivity(intent10);
                 break;
 
+            case R.id.compatible:
+                Intent intent11 = new Intent(MainPage.this, SelectedCategoryActivity.class);
+                intent11.putExtra("group", "Compatible with me");
+                startActivity(intent11);
+                break;
+
 
             case R.id.profile:
                 Intent intent = new Intent(MainPage.this, ProfileActivity.class);
