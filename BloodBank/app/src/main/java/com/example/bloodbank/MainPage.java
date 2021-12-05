@@ -11,6 +11,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ArrayAdapter;
@@ -138,6 +139,12 @@ public class MainPage extends AppCompatActivity implements NavigationView.OnNavi
                     }else{
                         nav_profile_img.setImageResource(R.drawable.profile);
                     }
+
+                    Menu nav_menu = navigationView.getMenu();
+                    if(type.equals("donor")){
+                        nav_menu.findItem(R.id.sentEmail).setTitle("Received Emails");
+
+                    }
                 }
 
             }
@@ -259,6 +266,11 @@ public class MainPage extends AppCompatActivity implements NavigationView.OnNavi
                 Intent intent11 = new Intent(MainPage.this, SelectedCategoryActivity.class);
                 intent11.putExtra("group", "Compatible with me");
                 startActivity(intent11);
+                break;
+
+            case R.id.sentEmail:
+                Intent intent12 = new Intent(MainPage.this, SendEmailActivity.class);
+                startActivity(intent12);
                 break;
 
 

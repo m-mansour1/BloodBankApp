@@ -36,12 +36,12 @@ public class JavaMailApi extends AsyncTask<Void, Void, Void> {
     ProgressDialog progressDialog;
 
     @Override
-    protected void onPostExecute(Void unused) {
+    protected void onPreExecute() {
         progressDialog = new ProgressDialog(context);
         progressDialog.setMessage("Sending email..");
         progressDialog.setTitle("Sending Email to donor");
         progressDialog.show();
-        super.onPostExecute(unused);
+        super.onPreExecute();
     }
 
     @Override
@@ -77,10 +77,11 @@ public class JavaMailApi extends AsyncTask<Void, Void, Void> {
     }
 
     @Override
-    protected void onPreExecute() {
+    protected void onPostExecute(Void unused) {
+
         progressDialog.dismiss();
         startAlertDialog();
-        super.onPreExecute();
+        super.onPostExecute(unused);
     }
 
     private void startAlertDialog() {

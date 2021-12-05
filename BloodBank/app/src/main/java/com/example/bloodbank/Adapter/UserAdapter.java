@@ -13,8 +13,11 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
+import com.example.bloodbank.Email.JavaMailApi;
 import com.example.bloodbank.Model.User;
 import com.example.bloodbank.R;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -91,6 +94,21 @@ public class UserAdapter extends RecyclerView.Adapter<UserAdapter.ViewHolder> {
                                                 "Kindly reach out to them. \n"+
                                                 "Blood Donation Application\n";
 
+                                        JavaMailApi javaMailApi = new JavaMailApi(context, mEmail, mSubject, mMessage);
+                                        javaMailApi.execute();
+                                        DatabaseReference Sendreference = FirebaseDatabase.getInstance().getReference("emails")
+                                                .child(FirebaseAuth.getInstance().getCurrentUser().getUid());
+                                        Sendreference.child(Recieverid).setValue(true).addOnCompleteListener(new OnCompleteListener<Void>() {
+                                            @Override
+                                            public void onComplete(@NonNull Task<Void> task) {
+                                                if(task.isSuccessful()){
+                                                    DatabaseReference Receiveref = FirebaseDatabase.getInstance().getReference("emails")
+                                                            .child(Recieverid);
+                                                    Receiveref.child(FirebaseAuth.getInstance().getCurrentUser().getUid()).setValue(true);
+
+                                                }
+                                            }
+                                        });
 
                                     }
 
