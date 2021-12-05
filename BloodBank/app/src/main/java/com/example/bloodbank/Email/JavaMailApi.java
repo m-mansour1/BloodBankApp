@@ -1,8 +1,14 @@
 package com.example.bloodbank.Email;
 
+import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.os.AsyncTask;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.widget.Button;
+
+import com.example.bloodbank.R;
 
 import java.util.Properties;
 
@@ -73,6 +79,25 @@ public class JavaMailApi extends AsyncTask<Void, Void, Void> {
     @Override
     protected void onPreExecute() {
         progressDialog.dismiss();
+        startAlertDialog();
         super.onPreExecute();
+    }
+
+    private void startAlertDialog() {
+        AlertDialog.Builder dialog = new AlertDialog.Builder(context);
+        LayoutInflater  inflater = LayoutInflater.from(context);
+        View view = inflater.inflate(R.layout.output_layout, null);
+        dialog.setView(view);
+        final AlertDialog dialog1  = dialog.create();
+        dialog1.setCancelable(false);
+
+        Button closeButton = view.findViewById(R.id.closeButton);
+        closeButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dialog1.dismiss();
+            }
+        });
+        dialog1.show();
     }
 }

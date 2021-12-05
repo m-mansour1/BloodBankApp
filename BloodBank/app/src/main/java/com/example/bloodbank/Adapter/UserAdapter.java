@@ -1,6 +1,8 @@
 package com.example.bloodbank.Adapter;
 
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,6 +15,12 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.bumptech.glide.Glide;
 import com.example.bloodbank.Model.User;
 import com.example.bloodbank.R;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
 import java.util.List;
 
@@ -49,6 +57,55 @@ public class UserAdapter extends RecyclerView.Adapter<UserAdapter.ViewHolder> {
         holder.bloodType.setText(user.getBloodType());
         
         Glide.with(context).load(user.getProfilepictureurl()).into(holder.userProfile);
+        final String RecieverName = user.getName();
+        final String Recieverid = user.getId();
+        holder.SendEmail.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                new AlertDialog.Builder(context)
+                        .setTitle("SEND EMAIL")
+                        .setMessage("Send email to "+ user.getName()+"?")
+                        .setCancelable(false)
+                        .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                DatabaseReference ref = FirebaseDatabase.getInstance().getReference()
+                                        .child("users").child(FirebaseAuth.getInstance().getCurrentUser().getUid());
+                                ref.addValueEventListener(new ValueEventListener() {
+                                    @Override
+                                    public void onDataChange(@NonNull DataSnapshot snapshot) {
+                                        String SenderName = snapshot.child("name").getValue().toString();
+                                        String SenderEmail = snapshot.child("email").getValue().toString();
+                                        String phone = snapshot.child("phonenumber").getValue().toString();
+                                        String bloodtype = snapshot.child("bloodType").getValue().toString();
+
+                                        String mEmail = user.getEmail();
+                                        String mSubject = "Blood Donation";
+                                        String mMessage = "Hello, " + RecieverName + ", \n"+
+                                                SenderName +" needs blood. \n"+
+                                                "Here is there details:\n"+
+                                                "Name: "+ SenderName +"\n"+
+                                                "Phone Number: "+ phone +"\n"+
+                                                "Email: "+ SenderEmail +"\n"+
+                                                "Blood Type: "+ bloodtype +"\n"+
+                                                "Kindly reach out to them. \n"+
+                                                "Blood Donation Application\n";
+
+
+                                    }
+
+                                    @Override
+                                    public void onCancelled(@NonNull DatabaseError error) {
+
+                                    }
+                                });
+                            }
+                        })
+                        .setNegativeButton("NO", null)
+                        .show();
+
+            }
+        });
     }
 
     @Override
