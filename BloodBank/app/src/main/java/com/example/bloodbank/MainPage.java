@@ -143,6 +143,7 @@ public class MainPage extends AppCompatActivity implements NavigationView.OnNavi
                     Menu nav_menu = navigationView.getMenu();
                     if(type.equals("donor")){
                         nav_menu.findItem(R.id.sentEmail).setTitle("Received Emails");
+                        nav_menu.findItem(R.id.notifications).setVisible(true);
 
                     }
                 }
@@ -268,12 +269,17 @@ public class MainPage extends AppCompatActivity implements NavigationView.OnNavi
                 startActivity(intent11);
                 break;
 
+            case R.id.notifications:
+                Intent intent13 = new Intent(MainPage.this, NotificationsActivity.class);
+                startActivity(intent13);
+                break;
+
             case R.id.sentEmail:
                 Intent intent12 = new Intent(MainPage.this, SendEmailActivity.class);
                 startActivity(intent12);
                 break;
-
-
+                
+                
             case R.id.profile:
                 Intent intent = new Intent(MainPage.this, ProfileActivity.class);
                 startActivity(intent);
